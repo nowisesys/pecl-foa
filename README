@@ -1,0 +1,44 @@
+
+   PECL FOA - PHP extension implementing the FOA encoding/decoding method.
+
+
+** GENERAL:
+
+   This is an PECL extension that is built and linked as a module to PHP to
+   provide encoding/decoding of data following the FOA specification. See
+   http://it.bmc.uu.se/andlov/proj/libfoa/spec.php
+
+** REQUIREMENTS:
+
+   You need to install libfoa, get it from http://it.bmc.uu.se/andlov/proj/libfoa/
+
+** INSTALL:
+
+   Build and install from source code using the standard procedure:
+   
+     bash$> ./configure
+     bash$> make 
+     bash$> make install
+   
+   The module will be installed into you Zend engine extension directory.
+   
+** TESTING:
+
+   Unit testing is done by running:
+   
+     bash$> php run-tests.php
+     
+   You have to build, install and enable the extension before the unit test
+   can be runned.
+   
+** BUG REPORT:
+
+   This extension is marked as experimental. If you find a bug, please
+   contact me. The contact into is in AUTHORS.
+
+** LICENSE:
+
+   This extension is released under the PHP license. See the LICENS.PHP file
+   for details.
+
+// Anders Lövgren, 2009-05-19
