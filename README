@@ -4,8 +4,8 @@
 
 ** GENERAL:
 
-   This is an PECL extension that is built and linked as a module to PHP to
-   provide encoding/decoding of data following the FOA specification. See
+   This is an PHP Extension (PECL) that is dynmaic linked to PHP as a module
+   that provides encoding/decoding of data following the FOA specification. See
    http://it.bmc.uu.se/andlov/proj/libfoa/spec.php
 
 ** REQUIREMENTS:
