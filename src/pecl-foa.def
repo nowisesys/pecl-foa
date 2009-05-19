@@ -4,6 +4,6 @@ foa_set_mode(int mode, bool enable) Enable or disable mode. The mode is either F
 int foa_get_mode(int mode) Get whether mode is currently enabled or disabled. 
 string foa_encode(int type [, string name [, string data]]) Encodes the entity defined by the parameters. The type argument is either one of: FOA_TYPE_DATA_ENTITY, FOA_START_OBJECT, FOA_START_ARRAY, FOA_END_OBJECT or FOA_END_ARRAY. The name and data is only used with FOA_TYPE_DATA_ENTITY. Returns the encoded entity string.
 array foa_decode() Decodes next entity from the input source (either an stream set by foa_set_stream() or an input buffer set by foa_set_buffer()).
-bool foa_error_set Return true if error is set.
+bool foa_has_error Return true if error is set.
 string foa_last_error Get last error message.
 foa_reset_error Clear last error message.
