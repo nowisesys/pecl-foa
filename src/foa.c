@@ -1,5 +1,5 @@
 /* PECL FOA - PHP extension implementing the FOA encoding/decoding method.
- * Copyright (C) 2009 Anders Lövgren
+ * Copyright (C) 2009-2019 Anders LÃ¶vgren
  * 
  * THIS SOFTWARE IS PROVIDED BY THE PHP DEVELOPMENT TEAM ``AS IS'' AND 
  * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
@@ -281,8 +281,7 @@ PHP_FUNCTION(foa_encode)
 					0, 
 					(int)type, 
 					(const char *)name, 
-					(const char *)data), 
-		      1);
+					(const char *)data), 1);
 }
 /* }}} */
 
