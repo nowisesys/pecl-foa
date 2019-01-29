@@ -3,7 +3,7 @@ foa_get_mode() function
 --SKIPIF--
 <?php if (!extension_loaded("foa")) print "skip"; ?>
 --FILE--
-<?php 
+<?php
 $summary = '';
 
 foa_set_mode(FOA_MODE_ESCAPE, true);
@@ -23,6 +23,7 @@ $result = foa_get_mode(FOA_MODE_HASHES);
 $summary .= $result ? 1 : 0;
 
 var_dump($summary)
+
 ?>
 --EXPECT--
 string(4) "1010"
