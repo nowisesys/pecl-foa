@@ -14,6 +14,7 @@
       <itemPath>configure</itemPath>
       <itemPath>nbproject/private/launcher.properties</itemPath>
     </logicalFolder>
+    <itemPath>DEBUG</itemPath>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
   <sourceRootList>
@@ -28,7 +29,7 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <flagsDictionary>
-        <element flagsID="0" commonFlags="-fPIC"/>
+        <element flagsID="0" commonFlags="-g -O2 -fPIC"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -43,12 +44,12 @@
               <pElem>.</pElem>
               <pElem>include</pElem>
               <pElem>main</pElem>
-              <pElem>/usr/lib64/php5.6/include/php</pElem>
-              <pElem>/usr/lib64/php5.6/include/php/main</pElem>
-              <pElem>/usr/lib64/php5.6/include/php/TSRM</pElem>
-              <pElem>/usr/lib64/php5.6/include/php/Zend</pElem>
-              <pElem>/usr/lib64/php5.6/include/php/ext</pElem>
-              <pElem>/usr/lib64/php5.6/include/php/ext/date/lib</pElem>
+              <pElem>/usr/lib64/php7.1/include/php</pElem>
+              <pElem>/usr/lib64/php7.1/include/php/main</pElem>
+              <pElem>/usr/lib64/php7.1/include/php/TSRM</pElem>
+              <pElem>/usr/lib64/php7.1/include/php/Zend</pElem>
+              <pElem>/usr/lib64/php7.1/include/php/ext</pElem>
+              <pElem>/usr/lib64/php7.1/include/php/ext/date/lib</pElem>
               <pElem>/usr/local/include</pElem>
             </incDir>
             <preprocessorList>
@@ -63,6 +64,8 @@
           <preBuildCommand>./configure CC=${IDE_CC} CXX=${IDE_CXX} CFLAGS="-g3 -gdwarf-2" CXXFLAGS="-g3 -gdwarf-2"</preBuildCommand>
         </preBuild>
       </makefileType>
+      <item path="DEBUG" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/foa.c" ex="false" tool="0" flavor2="0">
         <cTool flags="0">
         </cTool>
