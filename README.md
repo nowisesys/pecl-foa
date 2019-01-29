@@ -6,3 +6,6 @@ found here: https://nowise.se/oss/libfoa/spec
 
 The library is released under The PHP License version 3.01, see the file 
 LICENSE.PHP for details.
+
+Extension should be compatible with PHP 5.6 and PHP 7.x. Remember to run 'make test'
+after compilation.
