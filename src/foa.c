@@ -69,7 +69,7 @@ zend_module_entry foa_module_entry = {
 	PHP_RSHUTDOWN(foa),
 	PHP_MINFO(foa),
 #if ZEND_MODULE_API_NO >= 20010901
-	"1.0.0",
+	"1.0.1",
 #endif
 	STANDARD_MODULE_PROPERTIES
 };
