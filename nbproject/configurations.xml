@@ -44,12 +44,12 @@
               <pElem>.</pElem>
               <pElem>include</pElem>
               <pElem>main</pElem>
-              <pElem>/usr/lib64/php7.1/include/php</pElem>
-              <pElem>/usr/lib64/php7.1/include/php/main</pElem>
-              <pElem>/usr/lib64/php7.1/include/php/TSRM</pElem>
-              <pElem>/usr/lib64/php7.1/include/php/Zend</pElem>
-              <pElem>/usr/lib64/php7.1/include/php/ext</pElem>
-              <pElem>/usr/lib64/php7.1/include/php/ext/date/lib</pElem>
+              <pElem>/usr/lib64/php7.2/include/php</pElem>
+              <pElem>/usr/lib64/php7.2/include/php/main</pElem>
+              <pElem>/usr/lib64/php7.2/include/php/TSRM</pElem>
+              <pElem>/usr/lib64/php7.2/include/php/Zend</pElem>
+              <pElem>/usr/lib64/php7.2/include/php/ext</pElem>
+              <pElem>/usr/lib64/php7.2/include/php/ext/date/lib</pElem>
               <pElem>/usr/local/include</pElem>
             </incDir>
             <preprocessorList>
@@ -64,8 +64,6 @@
           <preBuildCommand>./configure CC=${IDE_CC} CXX=${IDE_CXX} CFLAGS="-g3 -gdwarf-2" CXXFLAGS="-g3 -gdwarf-2"</preBuildCommand>
         </preBuild>
       </makefileType>
-      <item path="DEBUG" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/foa.c" ex="false" tool="0" flavor2="0">
         <cTool flags="0">
         </cTool>

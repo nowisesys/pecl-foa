@@ -299,7 +299,7 @@ PHP_FUNCTION(foa_encode)
 	char *data = NULL;
 	size_t name_len;
 	size_t data_len;
-	zend_long type;
+	long type;
 
 #if ZEND_MODULE_API_NO > 20131226  /* PHP 7.x */
 	ZEND_PARSE_PARAMETERS_START(1, 3)
@@ -340,7 +340,7 @@ PHP_FUNCTION(foa_encode)
    Decodes next entity from the input source (either an stream set by foa_set_stream() or an input buffer set by foa_set_buffer()). */
 PHP_FUNCTION(foa_decode)
 {
-#if ZEND_MODULE_API_NO >= 20170718  /* PHP 7.2 */
+#if ZEND_MODULE_API_NO >= 20180731  /* PHP 7.3 */
 	ZEND_PARSE_PARAMETERS_NONE();
 #elif ZEND_MODULE_API_NO > 20131226 /* PHP 7.1 */
 	zend_parse_parameters_none();
@@ -382,7 +382,7 @@ PHP_FUNCTION(foa_decode)
    Return true if error is set. */
 PHP_FUNCTION(foa_has_error)
 {
-#if ZEND_MODULE_API_NO >= 20170718  /* PHP 7.2 */
+#if ZEND_MODULE_API_NO >= 20180731  /* PHP 7.3 */
 	ZEND_PARSE_PARAMETERS_NONE();
 #elif ZEND_MODULE_API_NO > 20131226 /* PHP 7.1 */
 	zend_parse_parameters_none();
@@ -404,7 +404,7 @@ PHP_FUNCTION(foa_has_error)
    Get last error message. */
 PHP_FUNCTION(foa_last_error)
 {
-#if ZEND_MODULE_API_NO >= 20170718  /* PHP 7.2 */
+#if ZEND_MODULE_API_NO >= 20180731  /* PHP 7.3 */
 	ZEND_PARSE_PARAMETERS_NONE();
 #elif ZEND_MODULE_API_NO > 20131226 /* PHP 7.1 */
 	zend_parse_parameters_none();
@@ -434,7 +434,7 @@ PHP_FUNCTION(foa_last_error)
    Clear last error message. */
 PHP_FUNCTION(foa_reset_error)
 {
-#if ZEND_MODULE_API_NO >= 20170718  /* PHP 7.2 */
+#if ZEND_MODULE_API_NO >= 20180731  /* PHP 7.3 */
 	ZEND_PARSE_PARAMETERS_NONE();
 #elif ZEND_MODULE_API_NO > 20131226 /* PHP 7.1 */
 	zend_parse_parameters_none();
