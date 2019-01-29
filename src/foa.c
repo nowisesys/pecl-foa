@@ -181,18 +181,27 @@ PHP_MINFO_FUNCTION(foa)
    Set stream for next encode or decode operation. If decode, then the stream is used as input. If encode, then its used as output. */
 PHP_FUNCTION(foa_set_stream)
 {
-	int argc = ZEND_NUM_ARGS();
 	zval *resarg;
 	php_stream *stream;
 	FILE *fp = NULL;
 
-	if (zend_parse_parameters(argc TSRMLS_CC,
+#if ZEND_MODULE_API_NO > 20131226  /* PHP 7.x */
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+	Z_PARAM_RESOURCE(resarg)
+	ZEND_PARSE_PARAMETERS_END();
+#else      /* PHP 5.6 */ 
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 		"r",
 		&resarg) == FAILURE) {
 		return;
 	}
+#endif
 
+#if ZEND_MODULE_API_NO > 20131226  /* PHP 7.x */
+	php_stream_from_zval(stream, resarg);
+#else      /* PHP 5.6 */
 	php_stream_from_zval(stream, &resarg);
+#endif
 
 	if (php_stream_cast(stream,
 		PHP_STREAM_AS_STDIO,
@@ -209,16 +218,26 @@ PHP_FUNCTION(foa_set_stream)
    Set the buffer to decode entities from. */
 PHP_FUNCTION(foa_set_buffer)
 {
-	char *buffer = NULL;
-	int argc = ZEND_NUM_ARGS();
+#if ZEND_MODULE_API_NO > 20131226  /* PHP 7.x */
+	char *buffer;
+	size_t buffer_len;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+	Z_PARAM_STRING(buffer, buffer_len)
+	ZEND_PARSE_PARAMETERS_END();
+#else      /* PHP 5.6 */
+	char *buffer;
 	int buffer_len;
 
-	if (zend_parse_parameters(argc TSRMLS_CC,
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 		"s",
 		&buffer,
 		&buffer_len) == FAILURE) {
+		php_printf("BUFFER 2\n");
 		return;
 	}
+#endif
+
 	foa_set_buffer(FOA_G(ptr), buffer);
 }
 /* }}} */
@@ -227,16 +246,22 @@ PHP_FUNCTION(foa_set_buffer)
    Enable or disable mode. The mode is either FOA_MODE_ESCAPE, FOA_MODE_HASHES or FOA_MODE_SETERR. */
 PHP_FUNCTION(foa_set_mode)
 {
-	int argc = ZEND_NUM_ARGS();
 	long mode;
 	zend_bool enable;
 
-	if (zend_parse_parameters(argc TSRMLS_CC,
+#if ZEND_MODULE_API_NO > 20131226  /* PHP 7.x */
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+	Z_PARAM_LONG(mode)
+	Z_PARAM_BOOL(enable)
+	ZEND_PARSE_PARAMETERS_END();
+#else     /* PHP 5.6 */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 		"lb",
 		&mode,
 		&enable) == FAILURE) {
 		return;
 	}
+#endif
 
 	foa_set_mode(FOA_G(ptr), mode, enable);
 }
@@ -246,15 +271,20 @@ PHP_FUNCTION(foa_set_mode)
    Get whether mode is currently enabled or disabled.  */
 PHP_FUNCTION(foa_get_mode)
 {
-	int argc = ZEND_NUM_ARGS();
 	long mode;
 	int enable = 0;
 
-	if (zend_parse_parameters(argc TSRMLS_CC,
+#if ZEND_MODULE_API_NO > 20131226  /* PHP 7.x */
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+	Z_PARAM_LONG(mode)
+	ZEND_PARSE_PARAMETERS_END();
+#else  /* PHP 5.6 */
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 		"l",
 		&mode) == FAILURE) {
 		return;
 	}
+#endif
 
 	foa_get_mode(FOA_G(ptr), mode, &enable);
 	RETURN_LONG((long) enable);
@@ -267,12 +297,19 @@ PHP_FUNCTION(foa_encode)
 {
 	char *name = NULL;
 	char *data = NULL;
-	int argc = ZEND_NUM_ARGS();
-	int name_len;
-	int data_len;
-	long type;
+	size_t name_len;
+	size_t data_len;
+	zend_long type;
 
-	if (zend_parse_parameters(argc TSRMLS_CC,
+#if ZEND_MODULE_API_NO > 20131226  /* PHP 7.x */
+	ZEND_PARSE_PARAMETERS_START(1, 3)
+	Z_PARAM_LONG(type)
+	Z_PARAM_OPTIONAL
+	Z_PARAM_STRING(name, name_len)
+	Z_PARAM_STRING(data, data_len)
+	ZEND_PARSE_PARAMETERS_END();
+#else
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 		"l|ss",
 		&type,
 		&name,
@@ -281,12 +318,21 @@ PHP_FUNCTION(foa_encode)
 		&data_len) == FAILURE) {
 		return;
 	}
+#endif
 
+#if ZEND_MODULE_API_NO > 20131226  /* PHP 7.x */
+	RETURN_STRING((char *) foa_write(FOA_G(ptr),
+		0,
+		(int) type,
+		(const char *) name,
+		(const char *) data));
+#else      /* PHP 5.6 */
 	RETURN_STRING((char *) foa_write(FOA_G(ptr),
 		0,
 		(int) type,
 		(const char *) name,
 		(const char *) data), 1);
+#endif
 }
 /* }}} */
 
@@ -294,21 +340,39 @@ PHP_FUNCTION(foa_encode)
    Decodes next entity from the input source (either an stream set by foa_set_stream() or an input buffer set by foa_set_buffer()). */
 PHP_FUNCTION(foa_decode)
 {
+#if ZEND_MODULE_API_NO >= 20170718  /* PHP 7.2 */
+	ZEND_PARSE_PARAMETERS_NONE();
+#elif ZEND_MODULE_API_NO > 20131226 /* PHP 7.1 */
+	zend_parse_parameters_none();
+#else /* PHP 5.6 */
 	if (ZEND_NUM_ARGS() != 0) {
 		WRONG_PARAM_COUNT;
 	}
+#endif
+
 	const struct foa_entity *ent = foa_next(FOA_G(ptr));
 	if (!ent) {
 		RETURN_NULL();
 	}
 
 	array_init(return_value);
+
+#if ZEND_MODULE_API_NO > 20131226  /* PHP 7.x */
+	if (ent->name) {
+		add_assoc_string(return_value, "name", (char *) ent->name);
+	}
+	if (ent->data) {
+		add_assoc_string(return_value, "data", (char *) ent->data);
+	}
+#else      /* PHP 5.6 */
 	if (ent->name) {
 		add_assoc_string(return_value, "name", (char *) ent->name, 1);
 	}
 	if (ent->data) {
 		add_assoc_string(return_value, "data", (char *) ent->data, 1);
 	}
+#endif
+
 	add_assoc_long(return_value, "type", ent->type);
 	add_assoc_long(return_value, "line", ent->line);
 }
@@ -318,13 +382,21 @@ PHP_FUNCTION(foa_decode)
    Return true if error is set. */
 PHP_FUNCTION(foa_has_error)
 {
+#if ZEND_MODULE_API_NO >= 20170718  /* PHP 7.2 */
+	ZEND_PARSE_PARAMETERS_NONE();
+#elif ZEND_MODULE_API_NO > 20131226 /* PHP 7.1 */
+	zend_parse_parameters_none();
+#else /* PHP 5.6 */
 	if (ZEND_NUM_ARGS() != 0) {
 		WRONG_PARAM_COUNT;
 	}
+#endif
+
 	if (foa_error_set(FOA_G(ptr))) {
 		RETURN_TRUE;
+	} else {
+		RETURN_FALSE;
 	}
-	RETURN_FALSE;
 }
 /* }}} */
 
@@ -332,14 +404,29 @@ PHP_FUNCTION(foa_has_error)
    Get last error message. */
 PHP_FUNCTION(foa_last_error)
 {
+#if ZEND_MODULE_API_NO >= 20170718  /* PHP 7.2 */
+	ZEND_PARSE_PARAMETERS_NONE();
+#elif ZEND_MODULE_API_NO > 20131226 /* PHP 7.1 */
+	zend_parse_parameters_none();
+#else /* PHP 5.6 */
 	if (ZEND_NUM_ARGS() != 0) {
 		WRONG_PARAM_COUNT;
 	}
+#endif
+
+#if ZEND_MODULE_API_NO > 20131226  /* PHP 7.x */
+	if (foa_last_error(FOA_G(ptr))) {
+		RETURN_STRING((char *) foa_last_error(FOA_G(ptr)));
+	} else {
+		RETURN_NULL();
+	}
+#else      /* PHP 5.6 */
 	if (foa_last_error(FOA_G(ptr))) {
 		RETURN_STRING((char *) foa_last_error(FOA_G(ptr)), 1);
 	} else {
 		RETURN_NULL();
 	}
+#endif
 }
 /* }}} */
 
@@ -347,9 +434,16 @@ PHP_FUNCTION(foa_last_error)
    Clear last error message. */
 PHP_FUNCTION(foa_reset_error)
 {
+#if ZEND_MODULE_API_NO >= 20170718  /* PHP 7.2 */
+	ZEND_PARSE_PARAMETERS_NONE();
+#elif ZEND_MODULE_API_NO > 20131226 /* PHP 7.1 */
+	zend_parse_parameters_none();
+#else /* PHP 5.6 */
 	if (ZEND_NUM_ARGS() != 0) {
 		WRONG_PARAM_COUNT;
 	}
+#endif
+
 	foa_reset_error(FOA_G(ptr));
 }
 /* }}} */
