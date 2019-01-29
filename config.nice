@@ -2,9 +2,5 @@
 #
 # Created by configure
 
-CFLAGS='-g3 -gdwarf-2' \
-CXXFLAGS='-g3 -gdwarf-2' \
-CC='/usr/bin/gcc' \
-CXX='/usr/bin/g++' \
 './configure' \
 "$@"

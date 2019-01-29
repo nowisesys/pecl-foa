@@ -52,7 +52,7 @@ PHP_FUNCTION(foa_reset_error);
  * and END macros here:     
  */
 ZEND_BEGIN_MODULE_GLOBALS(foa)
-	struct libfoa *ptr;
+struct libfoa *ptr;
 ZEND_END_MODULE_GLOBALS(foa)
 
 /*
@@ -66,9 +66,9 @@ ZEND_END_MODULE_GLOBALS(foa)
  */
 
 #ifdef ZTS
-# define FOA_G(v) TSRMG(foa_globals_id, zend_foa_globals *, v)
+#define FOA_G(v) TSRMG(foa_globals_id, zend_foa_globals *, v)
 #else
-# define FOA_G(v) (foa_globals.v)
+#define FOA_G(v) (foa_globals.v)
 #endif
 
-#endif	/* PHP_FOA_H */
+#endif /* PHP_FOA_H */
