@@ -4,13 +4,13 @@
 
 ** GENERAL:
 
-   This is an PHP Extension (PECL) that is dynmaic linked to PHP as a module
+   This is an PHP Extension (PECL) that is dynamic linked to PHP as a module
    that provides encoding/decoding of data following the FOA specification. See
-   http://it.bmc.uu.se/andlov/proj/libfoa/spec.php
+   https://nowise.se/oss/libfoa/spec
 
 ** REQUIREMENTS:
 
-   You need to install libfoa, get it from http://it.bmc.uu.se/andlov/proj/libfoa/
+   You need to install libfoa, get it from https://nowise.se/oss/libfoa/
 
 ** INSTALL:
 
@@ -41,4 +41,4 @@
    This extension is released under the PHP license. See the LICENS.PHP file
    for details.
 
-// Anders Lövgren, 2009-05-19
+// Anders LÃ¶vgren, 2009-05-19
