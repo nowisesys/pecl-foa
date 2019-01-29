@@ -1,9 +1,8 @@
 dnl This file becomes configure.in for self-contained extensions.
 
-divert(1)
-
-AC_PREREQ(2.13)
+AC_PREREQ(2.59)
 AC_INIT(config.m4)
+ifdef([AC_PRESERVE_HELP_ORDER], [AC_PRESERVE_HELP_ORDER], [])
 
 PHP_CONFIG_NICE(config.nice)
 
@@ -17,11 +16,15 @@ AC_DEFUN([PHP_ALWAYS_SHARED],[
   test "[$]$1" = "no" && $1=yes
 ])dnl
 dnl
+
+test -z "$CFLAGS" && auto_cflags=1
+
 abs_srcdir=`(cd $srcdir && pwd)`
 abs_builddir=`pwd`
 
-AC_PROG_CC
+AC_PROG_CC([cc gcc])
 PHP_DETECT_ICC
+PHP_DETECT_SUNCC
 AC_PROG_CC_C_O
 
 dnl Support systems with system libraries in e.g. /usr/lib64
@@ -73,6 +76,7 @@ php_debug_is_enabled
 ],[
   PHP_DEBUG=no
 ])
+CPPFLAGS=$old_CPPFLAGS
 AC_MSG_RESULT([$PHP_DEBUG])
 
 AC_MSG_CHECKING([if zts is enabled])
@@ -89,18 +93,10 @@ php_zts_is_enabled
   PHP_THREAD_SAFETY=no
 ])
 CPPFLAGS=$old_CPPFLAGS
-AC_MSG_RESULT([$PHP_DEBUG])
+AC_MSG_RESULT([$PHP_THREAD_SAFETY])
 
 dnl Support for building and testing Zend extensions
-if test "$PHP_DEBUG" = "yes" && test "$PHP_THREAD_SAFETY" = "yes; then
-  ZEND_EXT_TYPE="zend_extension_debug_ts"
-elif test "$PHP_DEBUG" = "yes"; then
-  ZEND_EXT_TYPE="zend_extension_debug"
-elif test "$PHP_THREAD_SAFETY" = "yes; then
-  ZEND_EXT_TYPE="zend_extension_ts"
-else
-  ZEND_EXT_TYPE="zend_extension"
-fi
+ZEND_EXT_TYPE="zend_extension"
 PHP_SUBST(ZEND_EXT_TYPE)
 
 dnl Discard optimization flags when debugging is enabled
@@ -114,7 +110,16 @@ if test "$PHP_DEBUG" = "yes"; then
   dnl add -O0 only if GCC or ICC is used
   if test "$GCC" = "yes" || test "$ICC" = "yes"; then
     CFLAGS="$CFLAGS -O0"
-    CXXFLAGS="$CXXFLAGS -O0"
+    CXXFLAGS="$CXXFLAGS -g -O0"
+  fi
+  if test "$SUNCC" = "yes"; then
+    if test -n "$auto_cflags"; then
+      CFLAGS="-g"
+      CXXFLAGS="-g"
+    else
+      CFLAGS="$CFLAGS -g"
+      CXXFLAGS="$CFLAGS -g"
+    fi
   fi
 else
   PHP_DEBUG=0

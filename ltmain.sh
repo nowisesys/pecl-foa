@@ -44,7 +44,7 @@ EXIT_FAILURE=1
 PROGRAM=ltmain.sh
 PACKAGE=libtool
 VERSION=1.5.26
-TIMESTAMP=" (1.1220.2.493 2008/02/01 16:58:18)"
+TIMESTAMP=" (1.1220.2.492 2008/01/30 06:40:56)"
 
 # Be Bourne compatible (taken from Autoconf:_AS_BOURNE_COMPATIBLE).
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
@@ -73,13 +73,6 @@ elif test "X`($echo '\t') 2>/dev/null`" = 'X\t'; then
 else
   # Restart under the correct shell, and then maybe $echo will work.
   exec $SHELL "$progpath" --no-reexec ${1+"$@"}
-fi
-# Same for EGREP, and just to be sure, do LTCC as well
-if test "x$EGREP" = x ; then
-    EGREP=egrep
-fi
-if test "x$LTCC" = x ; then
-    LTCC=${CC-gcc}
 fi
 
 if test "X$1" = X--fallback-echo; then
@@ -288,21 +281,7 @@ func_infer_tag ()
 	    esac
 	    CC_quoted="$CC_quoted $arg"
 	  done
-	    # user sometimes does CC=<HOST>-gcc so we need to match that to 'gcc'
-	    trimedcc=`echo ${CC} | $SED -e "s/${host}-//g"`
-	    # and sometimes libtool has CC=<HOST>-gcc but user does CC=gcc
-	    extendcc=${host}-${CC}
-	    # and sometimes libtool has CC=<OLDHOST>-gcc but user has CC=<NEWHOST>-gcc  
-	    # (Gentoo-specific hack because we always export $CHOST)
-	    mungedcc=${CHOST-${host}}-${trimedcc}
 	    case "$@ " in
-	      "cc "* | " cc "* | "${host}-cc "* | " ${host}-cc "*|\
-	      "gcc "* | " gcc "* | "${host}-gcc "* | " ${host}-gcc "*)
-	      tagname=CC
-	      break ;;
-	      "$trimedcc "* | " $trimedcc "* | "`$echo $trimedcc` "* | " `$echo $trimedcc` "*|\
-	      "$extendcc "* | " $extendcc "* | "`$echo $extendcc` "* | " `$echo $extendcc` "*|\
-	      "$mungedcc "* | " $mungedcc "* | "`$echo $mungedcc` "* | " `$echo $mungedcc` "*|\
 	      " $CC "* | "$CC "* | " `$echo $CC` "* | "`$echo $CC` "* | " $CC_quoted"* | "$CC_quoted "* | " `$echo $CC_quoted` "* | "`$echo $CC_quoted` "*)
 	      # The compiler in the base compile command matches
 	      # the one in the tagged configuration.
@@ -909,7 +888,7 @@ if test -z "$show_help"; then
     # Lock this critical section if it is needed
     # We use this script file to make the link, it avoids creating a new file
     if test "$need_locks" = yes; then
-      until $run ln "$srcfile" "$lockfile" 2>/dev/null; do
+      until $run ln "$progpath" "$lockfile" 2>/dev/null; do
 	$show "Waiting for $lockfile to be removed"
 	sleep 2
       done
@@ -977,11 +956,12 @@ EOF
       fi
 
       if test -z "$output_obj"; then
+	$run $rm "$lobj"
 	# Place PIC objects in $objdir
 	command="$command -o $lobj"
+      else
+	$run $rm "$lobj" "$output_obj"
       fi
-
-      $run $rm "$lobj" "$output_obj"
 
       $show "$command"
       if $run eval $lt_env "$command"; then :
@@ -5489,11 +5469,6 @@ else
 	$echo >> $output "\
     if test \"\$libtool_execute_magic\" != \"$magic\"; then
       # Run the actual program with our arguments.
-
-      # Make sure env LD_LIBRARY_PATH does not mess us up
-      if test -n \"\${LD_LIBRARY_PATH+set}\"; then
-        export LD_LIBRARY_PATH=\$progdir:\$LD_LIBRARY_PATH
-      fi
 "
 	case $host in
 	# Backslashes separate directories on plain windows
@@ -5721,53 +5696,9 @@ fi\
 		  $echo "$modename: \`$deplib' is not a valid libtool archive" 1>&2
 		  exit $EXIT_FAILURE
 		fi
-		if test "x$EGREP" = x ; then
-			EGREP=egrep
-		fi
-		# We do not want portage's install root ($D) present.  Check only for
-		# this if the .la is being installed.
-		if test "$installed" = yes && test "$D"; then
-		  eval mynewdependency_lib=`echo "$libdir/$name" |sed -e "s:$D:/:g" -e 's:/\+:/:g'`
-		else
-		  mynewdependency_lib="$libdir/$name"
-		fi
-		# Do not add duplicates
-		if test "$mynewdependency_lib"; then
-		  my_little_ninja_foo_1=`echo $newdependency_libs |$EGREP -e "$mynewdependency_lib"`
-		  if test -z "$my_little_ninja_foo_1"; then
-		    newdependency_libs="$newdependency_libs $mynewdependency_lib"
-		  fi
-		fi
+		newdependency_libs="$newdependency_libs $libdir/$name"
 		;;
-		  *)
-		if test "$installed" = yes; then
-		  # Rather use S=WORKDIR if our version of portage supports it.
-		  # This is because some ebuild (gcc) do not use $S as buildroot.
-		  if test "$PWORKDIR"; then
-		    S="$PWORKDIR"
-		  fi
-		  # We do not want portage's build root ($S) present.
-		  my_little_ninja_foo_2=`echo $deplib |$EGREP -e "$S"`
-		  # We do not want portage's install root ($D) present.
-		  my_little_ninja_foo_3=`echo $deplib |$EGREP -e "$D"`
-		  if test -n "$my_little_ninja_foo_2" && test "$S"; then
-		    mynewdependency_lib=""
-		  elif test -n "$my_little_ninja_foo_3" && test "$D"; then
-		    eval mynewdependency_lib=`echo "$deplib" |sed -e "s:$D:/:g" -e 's:/\+:/:g'`
-		  else
-		    mynewdependency_lib="$deplib"
-		  fi
-		else
-		  mynewdependency_lib="$deplib"
-		fi
-		# Do not add duplicates
-		if test "$mynewdependency_lib"; then
-		  my_little_ninja_foo_4=`echo $newdependency_libs |$EGREP -e "$mynewdependency_lib"`
-		  if test -z "$my_little_ninja_foo_4"; then
-			newdependency_libs="$newdependency_libs $mynewdependency_lib"
-		  fi
-		fi
-		;;
+	      *) newdependency_libs="$newdependency_libs $deplib" ;;
 	      esac
 	    done
 	    dependency_libs="$newdependency_libs"
@@ -5819,10 +5750,6 @@ fi\
 	  case $host,$output,$installed,$module,$dlname in
 	    *cygwin*,*lai,yes,no,*.dll | *mingw*,*lai,yes,no,*.dll) tdlname=../bin/$dlname ;;
 	  esac
-	  # Do not add duplicates
-	  if test "$installed" = yes && test "$D"; then
-	    install_libdir=`echo "$install_libdir" |sed -e "s:$D:/:g" -e 's:/\+:/:g'`
-	  fi
 	  $echo > $output "\
 # $outputname - a libtool library file
 # Generated by $PROGRAM - GNU $PACKAGE $VERSION$TIMESTAMP
